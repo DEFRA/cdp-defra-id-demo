@@ -1,12 +1,12 @@
 import path from 'path'
 
-import { appConfig } from '~/src/config'
+import { config } from '~/src/config'
 import { createLogger } from '~/src/server/common/helpers/logger'
 
 const logger = createLogger()
-const appPathPrefix = appConfig.get('appPathPrefix')
+const appPathPrefix = config.get('appPathPrefix')
 const manifestPath = path.resolve(
-  appConfig.get('root'),
+  config.get('root'),
   '.public',
   'manifest.json'
 )
@@ -30,9 +30,9 @@ function buildNavigation(request) {
 
 function context(request) {
   return {
-    version: appConfig.get('version'),
-    serviceName: appConfig.get('serviceName'),
-    serviceUrl: appConfig.get('appPathPrefix'),
+    version: config.get('version'),
+    serviceName: config.get('serviceName'),
+    serviceUrl: config.get('appPathPrefix'),
     breadcrumbs: [],
     navigation: buildNavigation(request),
     getAssetPath: function (asset) {

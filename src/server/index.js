@@ -1,6 +1,6 @@
 import path from 'path'
 import hapi from '@hapi/hapi'
-import { appConfig } from '~/src/config'
+import { config } from '~/src/config'
 
 import { nunjucksConfig } from '~/src/config/nunjucks'
 import { router } from './router'
@@ -9,7 +9,7 @@ import { catchAll } from '~/src/server/common/helpers/errors'
 
 async function createServer() {
   const server = hapi.server({
-    port: appConfig.get('port'),
+    port: config.get('port'),
     routes: {
       validate: {
         options: {
@@ -17,7 +17,7 @@ async function createServer() {
         }
       },
       files: {
-        relativeTo: path.resolve(appConfig.get('root'), '.public')
+        relativeTo: path.resolve(config.get('root'), '.public')
       }
     },
     router: {
@@ -26,12 +26,10 @@ async function createServer() {
   })
 
   await server.register(requestLogger)
-
-  await server.register(router, {
-    routes: { prefix: appConfig.get('appPathPrefix') }
-  })
-
   await server.register(nunjucksConfig)
+  await server.register(router, {
+    routes: { prefix: config.get('appPathPrefix') }
+  })
 
   server.ext('onPreResponse', catchAll)
 
