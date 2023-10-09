@@ -124,35 +124,30 @@ const config = convict({
     default: oneMonth,
     env: 'SESSION_COOKIE_TTL'
   },
-  defraIdentityTenant: {
-    doc: 'DEFRA Identity Tenant',
+  defraIdOidcConfigurationUrl: {
+    doc: 'DEFRA ID OIDC Configuration URL',
     format: String,
-    env: 'DEFRA_IDENTITY_TENANT',
-    default: 'dcidmtest'
+    env: 'DEFRA_ID_OIDC_CONFIGURATION_URL',
+    default:
+      'https://your-account.cpdev.cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_cpdev_signupsignin/.well-known/openid-configuration'
   },
-  defraIdentityPolicy: {
-    doc: 'DEFRA Identity Policy',
+  defraIdServiceId: {
+    doc: 'DEFRA ID Service ID',
     format: String,
-    env: 'DEFRA_IDENTITY_POLICY',
-    default: 'b2c_1a_cui_cpdev_signupsignin'
-  },
-  defraIdentityServiceId: {
-    doc: 'DEFRA Identity Service ID',
-    format: String,
-    env: 'DEFRA_IDENTITY_SERVICE_ID',
+    env: 'DEFRA_ID_SERVICE_ID',
     default: 'd7d72b79-9c62-ee11-8df0-000d3adf7047'
   },
-  defraIdentityClientId: {
-    doc: 'DEFRA Identity Client ID',
+  defraIdClientId: {
+    doc: 'DEFRA ID Client ID',
     format: String,
-    env: 'DEFRA_IDENTITY_CLIENT_ID',
+    env: 'DEFRA_ID_CLIENT_ID',
     default: '2fb0d715-affa-4bf1-836e-44a464e3fbea'
   },
-  defraIdentityClientSecret: {
-    doc: 'DEFRA Identity Client Secret',
+  defraIdClientSecret: {
+    doc: 'DEFRA ID Client Secret',
     format: String,
     sensitive: true,
-    env: 'DEFRA_IDENTITY_CLIENT_SECRET',
+    env: 'DEFRA_ID_CLIENT_SECRET',
     default: ''
   }
 })

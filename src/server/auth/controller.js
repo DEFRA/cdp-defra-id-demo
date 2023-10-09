@@ -5,7 +5,7 @@ import { config } from '~/src/config'
 
 const authCallbackController = {
   options: {
-    auth: 'azure-oidc'
+    auth: 'defra-id'
   },
   handler: async (request, h) => {
     if (request.auth.isAuthenticated) {
@@ -16,14 +16,10 @@ const authCallbackController = {
 
       const sessionId = uuidv4()
       await request.server.app.cache.set(sessionId, {
-        id: profile.id,
-        email: profile.email,
-        displayName: profile.displayName,
-        loginHint: profile.loginHint,
+        ...profile,
         isAuthenticated: request.auth.isAuthenticated,
         token: request.auth.credentials.token,
         refreshToken: request.auth.credentials.refreshToken,
-        scope: request.auth.credentials.roles,
         expiresIn: expiresInMilliSeconds,
         expiresAt
       })
@@ -31,7 +27,6 @@ const authCallbackController = {
       request.cookieAuth.set({ sessionId })
 
       request.logger.info('User has been successfully authenticated')
-      request.logger.info(`expiresIn: ${expiresInSeconds}`)
     }
 
     const redirect =
