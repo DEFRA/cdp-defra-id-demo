@@ -16,14 +16,10 @@ const authCallbackController = {
 
       const sessionId = uuidv4()
       await request.server.app.cache.set(sessionId, {
-        id: profile.id,
-        email: profile.email,
-        displayName: profile.displayName,
-        loginHint: profile.loginHint,
+        ...profile,
         isAuthenticated: request.auth.isAuthenticated,
         token: request.auth.credentials.token,
         refreshToken: request.auth.credentials.refreshToken,
-        scope: request.auth.credentials.roles,
         expiresIn: expiresInMilliSeconds,
         expiresAt
       })

@@ -13,10 +13,10 @@ const logoutController = {
     }
 
     const referrer = request.info.referrer
-    const loginHint = authedUser.loginHint
+    const idTokenHint = authedUser.idToken
 
     const logoutUrl = encodeURI(
-      `https://your-account.cpdev.cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_cpdev_signupsignin/signout?id_token_hint=${loginHint}&post_logout_redirect_uri=${referrer}`
+      `https://your-account.cpdev.cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_cpdev_signupsignin/signout?id_token_hint=${idTokenHint}&post_logout_redirect_uri=${referrer}`
     )
 
     request.dropUserSession()
