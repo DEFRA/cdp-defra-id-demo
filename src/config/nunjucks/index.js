@@ -1,11 +1,12 @@
 import path from 'path'
+import yar from '@hapi/yar'
 import nunjucks from 'nunjucks'
 import hapiVision from '@hapi/vision'
 
-import { appConfig } from '~/src/config'
-import { context } from './context'
-import * as filters from './filters'
-import * as globals from './globals'
+import { config } from '~/src/config'
+import { context } from '~/src/config/nunjucks/context'
+import * as filters from '~/src/config/nunjucks/filters'
+import * as globals from '~/src/config/nunjucks/globals'
 
 const nunjucksEnvironment = nunjucks.configure(
   [
@@ -22,13 +23,16 @@ const nunjucksEnvironment = nunjucks.configure(
     throwOnUndefined: false,
     trimBlocks: true,
     lstripBlocks: true,
-    watch: appConfig.get('isDevelopment'),
-    noCache: appConfig.get('isDevelopment')
+    watch: config.get('isDevelopment'),
+    noCache: config.get('isDevelopment')
   }
 )
 
 const nunjucksConfig = {
-  plugin: hapiVision,
+  plugin: {
+    ...hapiVision,
+    dependency: yar
+  },
   options: {
     engines: {
       njk: {
@@ -43,13 +47,13 @@ const nunjucksConfig = {
     },
     relativeTo: path.normalize(path.resolve(__dirname, '..', '..')),
     path: 'server',
-    isCached: appConfig.get('isProduction'),
+    isCached: config.get('isProduction'),
     context
   }
 }
 
 Object.keys(globals).forEach((global) => {
-  nunjucksEnvironment.addFilter(global, globals[global])
+  nunjucksEnvironment.addGlobal(global, globals[global])
 })
 
 Object.keys(filters).forEach((filter) => {

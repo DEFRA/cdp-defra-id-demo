@@ -3,9 +3,11 @@ import path from 'path'
 
 import { version } from '~/package.json'
 
+const oneDay = 1000 * 60 * 60 * 24
 const oneWeek = 7 * 24 * 60 * 60 * 1000
+const oneMonth = 30 * 7 * 24 * 60 * 60 * 1000
 
-const appConfig = convict({
+const config = convict({
   env: {
     doc: 'The application environment.',
     format: ['production', 'development', 'test'],
@@ -65,9 +67,96 @@ const appConfig = convict({
     format: ['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'],
     default: 'info',
     env: 'LOG_LEVEL'
+  },
+  appBaseUrl: {
+    doc: 'Application base URL for after we login',
+    format: String,
+    default: 'http://localhost:3000',
+    env: 'APP_BASE_URL'
+  },
+  redisHost: {
+    doc: 'Redis cache host',
+    format: String,
+    default: '127.0.0.1',
+    env: 'REDIS_HOST'
+  },
+  redisUsername: {
+    doc: 'Redis cache username',
+    format: String,
+    default: '',
+    env: 'REDIS_USERNAME'
+  },
+  redisPassword: {
+    doc: 'Redis cache password',
+    format: '*',
+    default: '',
+    sensitive: true,
+    env: 'REDIS_PASSWORD'
+  },
+  redisKeyPrefix: {
+    doc: 'Redis cache key prefix name used to isolate the cached results across multiple clients',
+    format: String,
+    default: 'cdp-defra-id-demo',
+    env: 'REDIS_KEY_PREFIX'
+  },
+  redisTtl: {
+    doc: 'Redis cache global ttl',
+    format: Number,
+    default: oneDay,
+    env: 'REDIS_TTL'
+  },
+  useSingleInstanceCache: {
+    doc: 'Enable the use of a single instance Redis Cache',
+    format: Boolean,
+    default: process.env.NODE_ENV !== 'production',
+    env: 'USE_SINGLE_INSTANCE_CACHE'
+  },
+  sessionCookiePassword: {
+    doc: 'Session cookie password',
+    format: '*',
+    default: 'beepBoopBeepDevelopmentOnlyBeepBoop',
+    sensitive: true,
+    env: 'SESSION_COOKIE_PASSWORD'
+  },
+  sessionCookieTtl: {
+    doc: 'Session cookie ttl',
+    format: Number,
+    default: oneMonth,
+    env: 'SESSION_COOKIE_TTL'
+  },
+  defraIdentityTenant: {
+    doc: 'DEFRA Identity Tenant',
+    format: String,
+    env: 'DEFRA_IDENTITY_TENANT',
+    default: 'dcidmtest'
+  },
+  defraIdentityPolicy: {
+    doc: 'DEFRA Identity Policy',
+    format: String,
+    env: 'DEFRA_IDENTITY_POLICY',
+    default: 'b2c_1a_cui_cpdev_signupsignin'
+  },
+  defraIdentityServiceId: {
+    doc: 'DEFRA Identity Service ID',
+    format: String,
+    env: 'DEFRA_IDENTITY_SERVICE_ID',
+    default: 'd7d72b79-9c62-ee11-8df0-000d3adf7047'
+  },
+  defraIdentityClientId: {
+    doc: 'DEFRA Identity Client ID',
+    format: String,
+    env: 'DEFRA_IDENTITY_CLIENT_ID',
+    default: '2fb0d715-affa-4bf1-836e-44a464e3fbea'
+  },
+  defraIdentityClientSecret: {
+    doc: 'DEFRA Identity Client Secret',
+    format: String,
+    sensitive: true,
+    env: 'DEFRA_IDENTITY_CLIENT_SECRET',
+    default: ''
   }
 })
 
-appConfig.validate({ allowed: 'strict' })
+config.validate({ allowed: 'strict' })
 
-export { appConfig }
+export { config }
