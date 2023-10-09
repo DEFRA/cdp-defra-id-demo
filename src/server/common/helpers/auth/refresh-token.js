@@ -5,10 +5,8 @@ import { config } from '~/src/config'
 async function refreshAccessToken(request) {
   const authedUser = await request.getUserSession()
   const refreshToken = authedUser?.refreshToken ?? null
-  const tenant = config.get('defraIdentityTenant')
-  const policy = config.get('defraIdentityPolicy')
-  const clientId = config.get('defraIdentityClientId')
-  const clientSecret = config.get('defraIdentityClientSecret')
+  const clientId = config.get('defraIdClientId')
+  const clientSecret = config.get('defraIdClientSecret')
 
   const params = new URLSearchParams()
 
@@ -20,17 +18,14 @@ async function refreshAccessToken(request) {
 
   request.logger.info('Access token expired, refreshing...')
 
-  return await fetch(
-    `https://${tenant}.b2clogin.com/${tenant}.onmicrosoft.com/${policy}/oauth2/v2.0/token`,
-    {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Cache-Control': 'no-cache'
-      },
-      body: params
-    }
-  )
+  return await fetch(authedUser.tokenUrl, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Cache-Control': 'no-cache'
+    },
+    body: params
+  })
 }
 
 export { refreshAccessToken }
