@@ -1,16 +1,30 @@
+import qs from 'qs'
 import path from 'path'
 import hapi from '@hapi/hapi'
-import { config } from '~/src/config'
+import { Engine as CatboxRedis } from '@hapi/catbox-redis'
 
-import { nunjucksConfig } from '~/src/config/nunjucks'
 import { router } from './router'
+import { config } from '~/src/config'
+import { nunjucksConfig } from '~/src/config/nunjucks'
 import { requestLogger } from '~/src/server/common/helpers/request-logger'
 import { catchAll } from '~/src/server/common/helpers/errors'
+import { azureOidc } from '~/src/server/common/helpers/auth/azure-oidc'
+import { sessionManager } from '~/src/server/common/helpers/session-manager'
+import { sessionCookie } from '~/src/server/common/helpers/auth/session-cookie'
+import { buildRedisClient } from '~/src/server/common/helpers/redis-client'
+import { getUserSession } from '~/src/server/common/helpers/auth/get-user-session'
+import { dropUserSession } from '~/src/server/common/helpers/auth/drop-user-session'
+
+const client = buildRedisClient()
 
 async function createServer() {
   const server = hapi.server({
     port: config.get('port'),
     routes: {
+      auth: {
+        mode: 'try'
+      },
+      cors: true,
       validate: {
         options: {
           abortEarly: false
@@ -22,9 +36,33 @@ async function createServer() {
     },
     router: {
       stripTrailingSlash: true
-    }
+    },
+    query: {
+      parser: (query) => qs.parse(query)
+    },
+    cache: [
+      {
+        name: 'session',
+        engine: new CatboxRedis({
+          partition: config.get('redisKeyPrefix'),
+          client
+        })
+      }
+    ]
   })
 
+  server.app.cache = server.cache({
+    cache: 'session',
+    segment: config.get('redisKeyPrefix'),
+    expiresIn: config.get('redisTtl')
+  })
+
+  server.decorate('request', 'getUserSession', getUserSession)
+  server.decorate('request', 'dropUserSession', dropUserSession)
+
+  await server.register(sessionManager)
+  await server.register(azureOidc)
+  await server.register(sessionCookie)
   await server.register(requestLogger)
   await server.register(nunjucksConfig)
   await server.register(router, {

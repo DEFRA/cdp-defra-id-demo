@@ -28,8 +28,10 @@ function buildNavigation(request) {
   ]
 }
 
-function context(request) {
+async function context(request) {
+  const authedUser = await request.getUserSession()
   return {
+    authedUser,
     version: config.get('version'),
     serviceName: config.get('serviceName'),
     serviceUrl: config.get('appPathPrefix'),
