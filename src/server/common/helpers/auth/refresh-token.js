@@ -18,7 +18,7 @@ async function refreshAccessToken(request) {
   params.append('refresh_token', refreshToken)
   params.append('scope', `${clientId}, openid, profile, email', offline_access`)
 
-  request.logger.info('Azure OIDC access token expired, refreshing...')
+  request.logger.info('Access token expired, refreshing...')
 
   return await fetch(
     `https://${tenant}.b2clogin.com/${tenant}.onmicrosoft.com/${policy}/oauth2/v2.0/token`,

@@ -13,13 +13,13 @@ const oAuthAuthorizeUrl = `https://${tenant}.b2clogin.com/${tenant}.onmicrosoft.
 const authCallbackUrl =
   config.get('appBaseUrl') + config.get('appPathPrefix') + '/auth/callback'
 
-const azureOidc = {
+const defraId = {
   plugin: {
-    name: 'azure-oidc',
+    name: 'defra-id',
     register: async (server) => {
       await server.register(bell)
 
-      server.auth.strategy('azure-oidc', 'bell', {
+      server.auth.strategy('defra-id', 'bell', {
         location: (request) => {
           if (request.info.referrer) {
             request.yar.flash('referrer', request.info.referrer)
@@ -28,7 +28,7 @@ const azureOidc = {
           return authCallbackUrl
         },
         provider: {
-          name: 'azure-oidc',
+          name: 'defra-id',
           protocol: 'oauth2',
           useParamsAuth: true,
           auth: oAuthAuthorizeUrl,
@@ -65,7 +65,7 @@ const azureOidc = {
         password: config.get('sessionCookiePassword'),
         clientId,
         clientSecret,
-        cookie: 'bell-azure-oidc',
+        cookie: 'bell-defra-id',
         isSecure: false,
         providerParams: {
           serviceId
@@ -75,4 +75,4 @@ const azureOidc = {
   }
 }
 
-export { azureOidc }
+export { defraId }

@@ -5,7 +5,7 @@ import { config } from '~/src/config'
 
 const authCallbackController = {
   options: {
-    auth: 'azure-oidc'
+    auth: 'defra-id'
   },
   handler: async (request, h) => {
     if (request.auth.isAuthenticated) {
@@ -27,7 +27,6 @@ const authCallbackController = {
       request.cookieAuth.set({ sessionId })
 
       request.logger.info('User has been successfully authenticated')
-      request.logger.info(`expiresIn: ${expiresInSeconds}`)
     }
 
     const redirect =

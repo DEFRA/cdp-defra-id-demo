@@ -2,7 +2,7 @@ import { config } from '~/src/config'
 
 const loginController = {
   options: {
-    auth: 'azure-oidc'
+    auth: 'defra-id'
   },
   handler: async (request, h) => h.redirect(config.get('appPathPrefix'))
 }

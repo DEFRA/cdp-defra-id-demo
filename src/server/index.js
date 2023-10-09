@@ -8,7 +8,7 @@ import { config } from '~/src/config'
 import { nunjucksConfig } from '~/src/config/nunjucks'
 import { requestLogger } from '~/src/server/common/helpers/request-logger'
 import { catchAll } from '~/src/server/common/helpers/errors'
-import { azureOidc } from '~/src/server/common/helpers/auth/azure-oidc'
+import { defraId } from '~/src/server/common/helpers/auth/defra-id'
 import { sessionManager } from '~/src/server/common/helpers/session-manager'
 import { sessionCookie } from '~/src/server/common/helpers/auth/session-cookie'
 import { buildRedisClient } from '~/src/server/common/helpers/redis-client'
@@ -61,7 +61,7 @@ async function createServer() {
   server.decorate('request', 'dropUserSession', dropUserSession)
 
   await server.register(sessionManager)
-  await server.register(azureOidc)
+  await server.register(defraId)
   await server.register(sessionCookie)
   await server.register(requestLogger)
   await server.register(nunjucksConfig)
