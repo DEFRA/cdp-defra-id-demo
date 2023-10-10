@@ -9,7 +9,8 @@
   {% call appPageBody() %}
   {% if authedUser.displayName %}
     <p>
-      Welcome, <strong>{{ authedUser.displayName }}</strong> - <a href="{{ serviceUrl }}/logout">Logout</a>
+      Welcome, <strong>{{ authedUser.displayName }}</strong><br />
+      <a href="https://your-account.cpdev.cui.defra.gov.uk/management">Manage account</a> - <a href="{{ serviceUrl }}/logout">Sign out</a>
     </p>
     <p>
       Here are your details:
