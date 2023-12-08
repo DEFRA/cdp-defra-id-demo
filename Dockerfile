@@ -34,6 +34,14 @@ ENV TZ="Europe/London"
 ARG PARENT_VERSION
 LABEL uk.gov.defra.ffc.parent-image=defradigital/node:${PARENT_VERSION}
 
+# Add curl to template.
+# CDP PLATFORM HEALTHCHECK REQUIREMENT
+USER root
+RUN apk update && \
+    apk add curl
+USER node
+
+
 COPY --from=productionBuild /home/node/package*.json ./
 COPY --from=productionBuild /home/node/.server ./.server/
 COPY --from=productionBuild /home/node/.public/ ./.public/
