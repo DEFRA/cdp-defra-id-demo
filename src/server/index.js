@@ -16,6 +16,7 @@ import { getUserSession } from '~/src/server/common/helpers/auth/get-user-sessio
 import { dropUserSession } from '~/src/server/common/helpers/auth/drop-user-session'
 
 const client = buildRedisClient()
+const appPathPrefix = config.get('appPathPrefix')
 
 async function createServer() {
   const server = hapi.server({
@@ -65,9 +66,14 @@ async function createServer() {
   await server.register(sessionCookie)
   await server.register(requestLogger)
   await server.register(nunjucksConfig)
-  await server.register(router, {
-    routes: { prefix: config.get('appPathPrefix') }
-  })
+
+  if (!appPathPrefix || appPathPrefix === '/') {
+    await server.register(router)
+  } else {
+    await server.register(router, {
+      routes: { prefix: appPathPrefix }
+    })
+  }
 
   server.ext('onPreResponse', catchAll)
 

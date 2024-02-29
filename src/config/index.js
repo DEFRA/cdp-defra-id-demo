@@ -41,6 +41,12 @@ const config = convict({
     format: String,
     default: path.normalize(path.join(__dirname, '..', '..'))
   },
+  assetPath: {
+    doc: 'Asset path',
+    format: String,
+    default: '/public',
+    env: 'ASSET_PATH'
+  },
   appPathPrefix: {
     doc: 'Application url path prefix this is needed only until we have host based routing',
     format: String,

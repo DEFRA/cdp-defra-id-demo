@@ -4,7 +4,9 @@ import { config } from '~/src/config'
 import { createLogger } from '~/src/server/common/helpers/logger'
 
 const logger = createLogger()
+const assetPath = config.get('assetPath')
 const appPathPrefix = config.get('appPathPrefix')
+
 const manifestPath = path.resolve(
   config.get('root'),
   '.public',
@@ -39,8 +41,11 @@ async function context(request) {
     navigation: buildNavigation(request),
     getAssetPath: function (asset) {
       const webpackAssetPath = webpackManifest[asset]
-
-      return `${appPathPrefix}/public/${webpackAssetPath}`
+      if (!appPathPrefix || appPathPrefix === '/') {
+        return `${assetPath}/${webpackAssetPath}`
+      } else {
+        return `${appPathPrefix}${assetPath}/${webpackAssetPath}`
+      }
     }
   }
 }
