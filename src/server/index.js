@@ -45,7 +45,8 @@ async function createServer() {
       {
         name: 'session',
         engine: new CatboxRedis({
-          client
+          client,
+          segment: 'session'
         })
       }
     ]
@@ -53,7 +54,8 @@ async function createServer() {
 
   server.app.cache = server.cache({
     cache: 'session',
-    expiresIn: config.get('redisTtl')
+    expiresIn: config.get('redisTtl'),
+    segment: 'session'
   })
 
   server.decorate('request', 'getUserSession', getUserSession)
