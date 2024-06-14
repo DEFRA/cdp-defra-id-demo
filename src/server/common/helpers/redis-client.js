@@ -37,6 +37,7 @@ function buildRedisClient() {
         redisOptions: {
           username: config.get('redisUsername'),
           password: config.get('redisPassword'),
+          keyPrefix: config.get('redisKeyPrefix'),
           db,
           tls: {}
         }
