@@ -135,7 +135,7 @@ const config = convict({
     format: String,
     env: 'DEFRA_ID_OIDC_CONFIGURATION_URL',
     default:
-      'https://your-account.cpdev.cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_cpdev_signupsignin/.well-known/openid-configuration'
+      'https://dcidmtest.b2clogin.com/dcidmtest.onmicrosoft.com/b2c_1a_cui_signin_stub/.well-known/openid-configuration'
   },
   defraIdServiceId: {
     doc: 'DEFRA ID Service ID',
