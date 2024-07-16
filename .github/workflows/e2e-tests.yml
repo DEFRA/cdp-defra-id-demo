@@ -49,7 +49,7 @@ jobs:
         env:
           DEFRA_ID_CLIENT_SECRET: test_value
           DEFRA_ID_OIDC_CONFIGURATION_URL: http://localhost:3200/cdp-defra-id-stub/.well-known/openid-configuration
-          PORT: 3000
+          PORT: 3003
           RUN_ID: ${{ github.run_number }}
           BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
           BROWSERSTACK_KEY: ${{ secrets.BROWSERSTACK_KEY }}

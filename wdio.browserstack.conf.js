@@ -62,7 +62,7 @@ export const config = {
   execArgv: debug ? ['--inspect'] : [],
   logLevel: debug ? 'debug' : 'info',
   bail: 0,
-  baseUrl: 'http://localhost:3000',
+  baseUrl: `http://localhost:${process.env.PORT}`,
   waitforTimeout: 10000,
   waitforInterval: 500,
   connectionRetryTimeout: 120000,
