@@ -37,7 +37,7 @@ const defraId = {
           useParamsAuth: true,
           auth: oidcConf.authorization_endpoint,
           token: oidcConf.token_endpoint,
-          scope: ['openid'],
+          scope: ['openid', 'offline_access'],
           profile: async function (credentials, params, get) {
             const payload = jwt.token.decode(credentials.token).decoded.payload
             const displayName = [payload.firstName, payload.lastName]
