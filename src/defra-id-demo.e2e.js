@@ -23,11 +23,11 @@ const user = {
 }
 
 describe('cdp-defra-id-demo', async () => {
-  const server = await createServer()
+  let server
 
   // eslint-disable-next-line no-undef
   before(async () => {
-    // server = await createServer()
+    server = await createServer()
     await server.initialize()
     await server.start()
   })
@@ -37,44 +37,42 @@ describe('cdp-defra-id-demo', async () => {
     await server.stop({ timeout: 4000 })
   })
 
-  describe('Login via stub', () => {
-    it('Login using API created user', async () => {
-      const apiResult = await fetch(
-        'http://localhost:3200/cdp-defra-id-stub/API/register',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(user)
-        }
-      )
+  it('Login using API created user', async () => {
+    const apiResult = await fetch(
+      'http://localhost:3200/cdp-defra-id-stub/API/register',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+      }
+    )
 
-      expect(apiResult.status).toEqual(201)
+    expect(apiResult.status).toEqual(201)
 
-      await browser.url('/cdp-defra-id-demo')
+    await browser.url('/cdp-defra-id-demo')
 
-      const title = await $(`[data-testid="app-heading-title"]`)
-      await expect(title).toHaveText('Home')
+    const title = await $(`[data-testid="app-heading-title"]`)
+    await expect(title).toHaveText('Home')
 
-      // Click login
-      const loginLink = await $('#login-link')
-      await expect(loginLink).toHaveText('here')
-      await loginLink.click()
+    // Click login
+    const loginLink = await $('#login-link')
+    await expect(loginLink).toHaveText('here')
+    await loginLink.click()
 
-      // Select profile and login
-      await expect(browser).toHaveTitle('DEFRA ID Login | cdp-defra-id-stub')
-      const profileLink = await $('=Log in')
-      await expect(profileLink).toExist()
-      await profileLink.click()
+    // Select profile and login
+    await expect(browser).toHaveTitle('DEFRA ID Login | cdp-defra-id-stub')
+    const profileLink = await $('=Log in')
+    await expect(profileLink).toExist()
+    await profileLink.click()
 
-      // Check we're logged in
-      await expect($('strong=Test User')).toExist()
-      await expect($('code=some@example.com')).toExist()
+    // Check we're logged in
+    await expect($('strong=Test User')).toExist()
+    await expect($('code=some@example.com')).toExist()
 
-      // Log out
-      await $('=Sign out').click()
-      const titleAfterSignOut = await $(`[data-testid="app-heading-title"]`)
-      await expect(titleAfterSignOut).toHaveText('Home')
-      await expect($('strong=Test User')).not.toExist()
-    })
+    // Log out
+    await $('=Sign out').click()
+    const titleAfterSignOut = await $(`[data-testid="app-heading-title"]`)
+    await expect(titleAfterSignOut).toHaveText('Home')
+    await expect($('strong=Test User')).not.toExist()
   })
 })
