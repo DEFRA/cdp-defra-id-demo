@@ -47,12 +47,6 @@ const config = convict({
     default: '/public',
     env: 'ASSET_PATH'
   },
-  appPathPrefix: {
-    doc: 'Application url path prefix this is needed only until we have host based routing',
-    format: String,
-    default: '/cdp-defra-id-demo',
-    env: 'APP_PATH_PREFIX'
-  },
   isProduction: {
     doc: 'If this application running in the production environment',
     format: Boolean,

@@ -12,10 +12,7 @@ const defraId = {
       const serviceId = config.get('defraIdServiceId')
       const clientId = config.get('defraIdClientId')
       const clientSecret = config.get('defraIdClientSecret')
-      const authCallbackUrl =
-        config.get('appBaseUrl') +
-        config.get('appPathPrefix') +
-        '/auth/callback'
+      const authCallbackUrl = config.get('appBaseUrl') + '/auth/callback'
 
       await server.register(bell)
 
