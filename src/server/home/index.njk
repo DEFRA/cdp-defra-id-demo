@@ -10,7 +10,7 @@
   {% if authedUser.displayName %}
     <p>
       Welcome, <strong>{{ authedUser.displayName }}</strong><br />
-      <a href="https://your-account.cpdev.cui.defra.gov.uk/management">Manage account</a> - <a href="{{ serviceUrl }}/logout">Sign out</a>
+      <a href="https://your-account.cpdev.cui.defra.gov.uk/management">Manage account</a> - <a href="/logout">Sign out</a>
     </p>
     <p>
       Here are your details:
@@ -25,7 +25,7 @@
       Welcome, guest!
     </p>
     <p>
-      You can login <a href="{{ serviceUrl }}/login">here</a>
+      You can login <a href="/login">here</a>
     </p>
   {% endif %}
   {% endcall %}
