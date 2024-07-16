@@ -2,6 +2,9 @@ import { browser, expect, $ } from '@wdio/globals'
 
 import { createServer } from '~/src/server'
 import fetch from 'node-fetch'
+import { createLogger } from '~/src/server/common/helpers/logger'
+
+const logger = createLogger()
 
 const user = {
   userId: '86a7607c-a1e7-41e5-a0b6-a41680d05a2a',
@@ -27,14 +30,20 @@ describe('cdp-defra-id-demo', async () => {
 
   // eslint-disable-next-line no-undef
   before(async () => {
-    server = await createServer()
+    if (server === undefined) {
+      server = await createServer()
+    }
+    logger.info('starting service')
     await server.initialize()
     await server.start()
+    logger.info('service started')
   })
 
   // eslint-disable-next-line no-undef
   after(async () => {
+    logger.info('stopping service')
     await server.stop({ timeout: 4000 })
+    logger.info('server stopped')
   })
 
   it('Login using API created user', async () => {

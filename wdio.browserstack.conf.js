@@ -11,7 +11,7 @@ export const config = {
   runner: 'local',
   specs: ['./src/**/*.e2e.js'],
   exclude: [],
-  maxInstances: debug ? 1 : 3,
+  maxInstances: 1,
 
   // Browserstack creds
   user: process.env.BROWSERSTACK_USER,
