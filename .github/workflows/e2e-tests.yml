@@ -30,6 +30,7 @@ jobs:
         ports:
           - 3200:3200
         env:
+          PORT: 3200
           OIDC_CLIENT_SECRET: test_value
         options: >-
           --health-cmd "curl http://localhost:3200/health"
