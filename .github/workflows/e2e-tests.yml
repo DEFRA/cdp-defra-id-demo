@@ -44,7 +44,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npm build
+      - run: npm run build
       - name: Run Tests
         env:
           DEFRA_ID_CLIENT_SECRET: test_value
