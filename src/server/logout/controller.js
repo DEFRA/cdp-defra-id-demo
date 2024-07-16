@@ -1,6 +1,5 @@
 import { isEmpty } from 'lodash'
 
-import { config } from '~/src/config'
 import { provideAuthedUser } from '~/src/server/logout/prerequisites/provide-authed-user'
 
 const logoutController = {
@@ -11,7 +10,7 @@ const logoutController = {
     const authedUser = request.pre.authedUser
 
     if (isEmpty(authedUser)) {
-      return h.redirect(config.get('appPathPrefix'))
+      return h.redirect('/')
     }
 
     const referrer = request.info.referrer
