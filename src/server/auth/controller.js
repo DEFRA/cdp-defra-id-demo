@@ -1,8 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { addSeconds } from 'date-fns'
 
-import { config } from '~/src/config'
-
 const authCallbackController = {
   options: {
     auth: 'defra-id'
@@ -29,8 +27,7 @@ const authCallbackController = {
       request.logger.info('User has been successfully authenticated')
     }
 
-    const redirect =
-      request.yar.flash('referrer')?.at(0) ?? config.get('appPathPrefix')
+    const redirect = request.yar.flash('referrer')?.at(0) ?? '/'
 
     return h.redirect(redirect)
   }

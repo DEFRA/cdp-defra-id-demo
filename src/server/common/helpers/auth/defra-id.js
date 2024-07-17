@@ -12,10 +12,7 @@ const defraId = {
       const serviceId = config.get('defraIdServiceId')
       const clientId = config.get('defraIdClientId')
       const clientSecret = config.get('defraIdClientSecret')
-      const authCallbackUrl =
-        config.get('appBaseUrl') +
-        config.get('appPathPrefix') +
-        '/auth/callback'
+      const authCallbackUrl = config.get('appBaseUrl') + '/auth/callback'
 
       await server.register(bell)
 
@@ -37,7 +34,7 @@ const defraId = {
           useParamsAuth: true,
           auth: oidcConf.authorization_endpoint,
           token: oidcConf.token_endpoint,
-          scope: ['openid'],
+          scope: ['openid', 'offline_access'],
           profile: async function (credentials, params, get) {
             const payload = jwt.token.decode(credentials.token).decoded.payload
             const displayName = [payload.firstName, payload.lastName]
