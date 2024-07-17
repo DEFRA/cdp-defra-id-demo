@@ -58,7 +58,7 @@ describe('cdp-defra-id-demo', async () => {
 
     expect(apiResult.status).toEqual(201)
 
-    await browser.url('/cdp-defra-id-demo')
+    await browser.url('/')
 
     const title = await $(`[data-testid="app-heading-title"]`)
     await expect(title).toHaveText('Home')
