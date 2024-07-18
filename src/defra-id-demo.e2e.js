@@ -33,10 +33,10 @@ describe('cdp-defra-id-demo', async () => {
     if (server === undefined) {
       server = await createServer()
     }
-    logger.info('starting service')
+    logger.info('Starting service')
     await server.initialize()
     await server.start()
-    logger.info('service started')
+    logger.info('Service started')
   })
 
   // eslint-disable-next-line no-undef
