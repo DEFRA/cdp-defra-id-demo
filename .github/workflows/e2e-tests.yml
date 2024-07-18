@@ -27,7 +27,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       cdp-defra-id-stubs:
-        image: defradigital/cdp-defra-id-stub:latest
+        image: defradigital/cdp-defra-id-stub:0.7.0
         ports:
           - 3200:3200
         env:
