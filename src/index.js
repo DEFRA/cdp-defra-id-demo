@@ -14,7 +14,7 @@ async function startServer() {
   const server = await createServer()
   await server.start()
 
-  logger.info('Server started successfully')
+  logger.info('Server started successfully.')
   logger.info(`Access your frontend on http://localhost:${config.get('port')}`)
 }
 
