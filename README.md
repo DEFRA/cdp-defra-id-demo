@@ -1,11 +1,10 @@
-# CDP Node Frontend Template
-
-Core delivery platform Node.js Frontend Template.
+# CDP DEFRA ID demo
 
 - [Requirements](#requirements)
   - [Node.js](#nodejs)
 - [Local development](#local-development)
   - [Setup](#setup)
+  - [Configure](#configure)
   - [Development](#development)
   - [Local JSON API](#local-json-api)
   - [Production](#production)
@@ -42,6 +41,28 @@ Install application dependencies:
 ```bash
 $ npm install
 ```
+
+### Configure
+
+You have to configure the _OIDC URL_, _client secret_ and possibly the `service id` and `client id`.
+
+This depends on which ID provider you connect this demo to.
+
+#### Defra ID Stub
+
+If integrating with the _CDP DEFRA-ID Stub_ during development you need to follow the configurations detailed in
+[github.com/DEFRA/cdp-defra-id-stub/readme#integrate](https://github.com/DEFRA/cdp-defra-id-stub/tree/main?tab=readme-ov-file#integrate).
+E.g. setting the _client secret_ and _OIDC URL_ properties.
+
+For local development either:
+
+- set these as env-vars `DEFRA_ID_OIDC_CONFIGURATION_URL` and `DEFRA_ID_CLIENT_SECRET` (preferred)
+- hard code them as defaults in `src/config/index.js` (not encouraged)
+
+For running a service in a CDP environment set it in either
+
+- [cdp-app-config](https://github.com/DEFRA/cdp-app-config) (temporary only)
+- in your service's secrets: [Secrets](https://github.com/DEFRA/cdp-documentation/blob/main/howto/secrets.md) (preferred)
 
 ### Development
 
