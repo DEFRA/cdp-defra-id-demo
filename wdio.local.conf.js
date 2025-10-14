@@ -1,4 +1,4 @@
-const allure = require('allure-commandline')
+import allure from 'allure-commandline'
 
 const debug = process.env.DEBUG
 const oneHour = 60 * 60 * 1000

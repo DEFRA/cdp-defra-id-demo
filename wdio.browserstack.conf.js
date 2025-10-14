@@ -1,4 +1,4 @@
-const allure = require('allure-commandline')
+import allure from 'allure-commandline'
 
 const serviceName = 'cdp-defra-id-demo'
 const runId = process.env.RUN_ID
