@@ -1,7 +1,4 @@
-const allure = require('allure-commandline')
-
-const serviceName = 'cdp-defra-id-demo'
-const runId = process.env.RUN_ID
+import allure from 'allure-commandline'
 
 const debug = process.env.DEBUG
 const oneHour = 60 * 60 * 1000
@@ -11,62 +8,31 @@ export const config = {
   runner: 'local',
   specs: ['./src/**/*.e2e.js'],
   exclude: [],
-  maxInstances: 1,
-
-  // Browserstack creds
-  user: process.env.BROWSERSTACK_USER,
-  key: process.env.BROWSERSTACK_KEY,
-
-  commonCapabilities: {
-    'bstack:options': {
-      buildName: `${serviceName}-${runId}`
-    }
-  },
-  capabilities: [
-    {
-      browserName: 'Edge',
-      'bstack:options': {
-        browserVersion: 'latest',
-        os: 'Windows',
-        osVersion: '11'
-      }
-    },
-    {
-      browserName: 'Chrome',
-      'bstack:options': {
-        browserVersion: 'latest',
-        os: 'Windows',
-        osVersion: '10'
-      }
-    }
-  ],
-
-  services: [
-    [
-      'browserstack',
-      {
-        testObservability: true,
-        testObservabilityOptions: {
-          user: process.env.BROWSERSTACK_USER,
-          key: process.env.BROWSERSTACK_KEY,
-          projectName: `${serviceName}`,
-          buildName: `${serviceName}-${runId}`
-        },
-        acceptInsecureCerts: true,
-        forceLocal: true,
-        browserstackLocal: true,
-        opts: {}
-      }
-    ]
-  ],
+  maxInstances: debug ? 1 : 3,
+  capabilities: debug
+    ? [{ browserName: 'chrome' }]
+    : [
+        {
+          maxInstances: 1,
+          browserName: 'chrome',
+          'goog:chromeOptions': {
+            args: [
+              '--no-sandbox',
+              '--disable-infobars',
+              '--disable-gpu',
+              '--window-size=1920,1080'
+            ]
+          }
+        }
+      ],
   execArgv: debug ? ['--inspect'] : [],
   logLevel: debug ? 'debug' : 'info',
   bail: 0,
-  baseUrl: `http://localhost:${process.env.PORT}`,
-  waitforTimeout: 10000,
-  waitforInterval: 500,
+  baseUrl: 'http://localhost:3000',
+  waitforTimeout: 6000,
+  waitforInterval: 1000,
   connectionRetryTimeout: 120000,
-  connectionRetryCount: 2,
+  connectionRetryCount: 3,
   framework: 'mocha',
   reporters: [
     'spec',
@@ -81,13 +47,12 @@ export const config = {
     ui: 'bdd',
     timeout: debug ? oneHour : oneMinute
   },
-
   /**
    * Gets executed once before all workers get launched.
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  // onPrepare: function (config, capabilities) {}
+  // onPrepare: function (config, capabilities) {},
   /**
    * Gets executed before a worker process is spawned and can be used to initialise specific service
    * for that worker as well as modify runtime environments in an async fashion.
@@ -105,7 +70,7 @@ export const config = {
    * @param  {object} specs    specs to be run in the worker process
    * @param  {number} retries  number of retries used
    */
-  // onWorkerEnd: function (cid, exitCode, specs, retries) {}
+  // onWorkerEnd: function (cid, exitCode, specs, retries) {},
   /**
    * Gets executed just before initialising the webdriver session and test framework. It allows you
    * to manipulate configurations depending on the capability or spec.
@@ -114,7 +79,7 @@ export const config = {
    * @param {Array.<String>} specs List of spec file paths that are to be run
    * @param {string} cid worker id (e.g. 0-0)
    */
-  // beforeSession: function (config, capabilities, specs, cid) {}
+  // beforeSession: function (config, capabilities, specs, cid) {},
   /**
    * Gets executed before test execution begins. At this point you can access to all global
    * variables like `browser`. It is the perfect place to define custom commands.
@@ -122,7 +87,7 @@ export const config = {
    * @param {Array.<String>} specs        List of spec file paths that are to be run
    * @param {object}         browser      instance of created browser/device session
    */
-  // before: function (capabilities, specs) {}
+  // before: function (capabilities, specs) {},
   /**
    * Runs before a WebdriverIO command gets executed.
    * @param {string} commandName hook command name
@@ -137,7 +102,7 @@ export const config = {
   /**
    * Function to be executed before a test (in Mocha/Jasmine) starts.
    */
-  // beforeTest: function (test, context) {}
+  // beforeTest: function (test, context) {},
   /**
    * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
    * beforeEach in Mocha)
@@ -168,6 +133,12 @@ export const config = {
     { error, result, duration, passed, retries }
   ) {
     await browser.takeScreenshot()
+
+    if (error) {
+      browser.executeScript(
+        'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed","reason": "At least 1 assertion failed"}}'
+      )
+    }
   },
 
   /**
@@ -206,7 +177,7 @@ export const config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  onComplete: async function (exitCode, config, capabilities, results) {
+  onComplete: function (exitCode, config, capabilities, results) {
     const reportError = new Error('Could not generate Allure report')
     const generation = allure(['generate', 'allure-results', '--clean'])
 
@@ -219,11 +190,11 @@ export const config = {
         if (exitCode !== 0) {
           return reject(reportError)
         }
-
         resolve()
       })
     })
   }
+
   /**
    * Gets executed when a refresh happens.
    * @param {string} oldSessionId session ID of the old session

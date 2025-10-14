@@ -1,5 +1,6 @@
 import { isEmpty } from 'lodash'
 
+import { removeUserSession } from '~/src/server/common/helpers/auth/user-session'
 import { provideAuthedUser } from '~/src/server/logout/prerequisites/provide-authed-user'
 
 const logoutController = {
@@ -20,8 +21,7 @@ const logoutController = {
       `${authedUser.logoutUrl}?id_token_hint=${idTokenHint}&post_logout_redirect_uri=${referrer}`
     )
 
-    request.dropUserSession()
-    request.cookieAuth.clear()
+    await removeUserSession(request)
 
     return h.redirect(logoutUrl)
   }

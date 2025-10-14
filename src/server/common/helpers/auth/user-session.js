@@ -1,8 +1,8 @@
 import jwt from '@hapi/jwt'
 import { addSeconds } from 'date-fns'
 
-function removeUserSession(request) {
-  request.dropUserSession()
+async function removeUserSession(request) {
+  await request.dropUserSession()
   request.cookieAuth.clear()
 }
 

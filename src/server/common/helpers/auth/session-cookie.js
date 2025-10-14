@@ -35,7 +35,7 @@ const sessionCookie = {
             const refreshAccessTokenJson = await response.json()
 
             if (!response.ok) {
-              removeUserSession(request)
+              await removeUserSession(request)
 
               return { isValid: false }
             }
